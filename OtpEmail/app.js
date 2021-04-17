@@ -13,11 +13,10 @@ app.post('/send',function(req,res){
 
 
     let transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        service : 'Gmail',        
+        host: `smtp.gmail.com`, 
         auth: {
-          user: 'whitecopy43@gmail.com',
-          pass: '!noWyouS3m#',
+          user: email,
+          pass: pass
         }
         
     });
@@ -27,8 +26,7 @@ app.post('/send',function(req,res){
        from : email,
        to: "rifaldinoviansyah11@gmail.com",
        subject: "Otp for registration is: ",
-       html: "<h3>OTP for account verification is </h3>"  
-             + "<h1 style='font-weight:bold;'>" + otp +"</h1>" // html body
+       text: 'That was easy!'  // html body
      };
      
      transporter.sendMail(mailOptions, (error, info) => {
