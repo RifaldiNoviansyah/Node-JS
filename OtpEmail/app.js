@@ -1,7 +1,7 @@
 const express=require('express');
-const bodyparser=require('body-parser');
 const nodemailer=require('nodemailer');
-const {email, pass} = process.env; //untuk mengakes file .env
+const smtpTransport = require(`nodemailer-smtp-transport`);
+
 const app=express();
     
 app.post('/send',function(req,res){
@@ -12,30 +12,31 @@ app.post('/send',function(req,res){
     otp = parseInt(otp);
 
 
-    let transporter = nodemailer.createTransport({
-        host: `smtp.gmail.com`, 
+      const transporter = nodemailer.createTransport(smtpTransport({
+        service: `gmail`,
+        host: `smtp.gmail.com`,
         auth: {
-          user: email,
-          pass: pass
+          user: 'email@gmail.com',
+          pass: 'pasword'
         }
-        
-    });
+      }));
 
     // send mail with defined transport object
     const mailOptions={
-       from : email,
-       to: "rifaldinoviansyah11@gmail.com",
+       from : 'youreemail',
+       to: "the intended email",
        subject: "Otp for registration is: ",
        text: 'That was easy!'  // html body
      };
      
-     transporter.sendMail(mailOptions, (error, info) => {
+     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-            return console.log(error);
+          console.log(error);
+        } else {
+          console.log(`Email sent: ` + info.response);
         }
-        console.log('Message sent: %s', info.messageId);   
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    });
+      });
+
 });
 
 const PORT=process.env.PORT||3000;
